@@ -3,11 +3,34 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>timelines.</title>
- 
+        <style>
+            body{background:#000; margin: 0}
+        </style>
     </head>
     <body>
+        <script src="underscore.js"></script>
     	<script type="text/javascript">
-    		
+            (function () {
+                var pictArray =[
+                    "1430.jpg",
+                    "1432.jpg",
+                    "1434.jpg",
+                    "1439.jpg",
+                    "1440.jpg"
+                    ];
+
+                var displayArray = _.sample(pictArray, 3);
+
+                function displayImage (img) {
+                    var DOMimg = document.createElement("img");
+                    DOMimg.src = 'pict/' + img;
+                    document.body.appendChild(DOMimg);
+                }
+
+                _.each(displayArray, function (img) {
+                    displayImage(img);
+                });
+            })();
     	</script>
     </body>
 </html>

@@ -1,36 +1,56 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>timelines.</title>
-        <style>
-            body{background:#000; margin: 0}
-        </style>
-    </head>
-    <body>
-        <script src="underscore.js"></script>
-    	<script type="text/javascript">
-            (function () {
-                var pictArray =[
-                    "1430.jpg",
-                    "1432.jpg",
-                    "1434.jpg",
-                    "1439.jpg",
-                    "1440.jpg"
-                    ];
+  <head>
+    <title>timeline</title>
+    <style>
+      body{background:#000; margin: 0; height:800px;}
+    </style>
+  </head>
+  <body>
+    <div class="image-wrapper"></div>
+  <script src="/socket.io/socket.io.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+<script>
+  (function () {
+  var socket = io(),
+      winOrdinal = parseInt(location.hash.substring(1), 10),
+      pictArray =[
+        "1430.jpg",
+        "1432.jpg",
+        "1434.jpg",
+        "1439.jpg",
+        "1440.jpg"
+      ],
+      isMaster = (winOrdinal === 1);
 
-                var displayArray = _.sample(pictArray, 3);
+      console.log('isMaster: ' + isMaster);
 
-                function displayImage (img) {
-                    var DOMimg = document.createElement("img");
-                    DOMimg.src = 'pict/' + img;
-                    document.body.appendChild(DOMimg);
-                }
+      function displayImage(img){
+        $('.image-wrapper').fadeOut(300, function () {
+          $('.image-wrapper').html('<img src="pict/' + img + '" >');
+        });
+        $('.image-wrapper').fadeIn(300);
+      }
 
-                _.each(displayArray, function (img) {
-                    displayImage(img);
-                });
-            })();
-    	</script>
-    </body>
+      // if page is master broadcast the new array
+      if (isMaster){
+          $('body').click(
+            _.throttle(
+            function () {
+              var displayArray = _.sample(pictArray, 3);
+              socket.emit('image refresh', displayArray);
+              displayImage(displayArray[0]);
+            }, 3000)
+          );
+      } else { // listen for changes and reload right image
+        socket.on('image refresh', function(imgArray){
+          displayImage(imgArray[winOrdinal-1]);
+        });
+      }
+     })();
+      
+
+</script>
+  </body>
 </html>

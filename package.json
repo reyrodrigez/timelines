@@ -1,0 +1,9 @@
+{
+  "name": "timeline-node",
+  "version": "0.0.1",
+  "description": "timeline node app",
+  "dependencies": {
+    "express": "~4.4.1",
+    "socket.io": "~1.0.4"
+  }
+}

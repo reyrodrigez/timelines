@@ -1,6 +1,13 @@
-::timelines::
+# timelines #
 =========
 
-Display multiple images from given array in separate browser window.
+Display multiple images in separate browser window.
+
+#### TODO: ####
+=========
+
+- click throttling
+- get number of connected windows
+- add autoslide
 
 
